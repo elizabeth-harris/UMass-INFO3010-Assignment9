@@ -39,7 +39,7 @@ public class MainMenu extends javax.swing.JFrame {
       menuBar.add(InvestersMenuOption);
       menuBar.add(BrokersMenuOption);
       menuBar.add(InvestmentCompaniesMenuOption);
-      
+   
       // Add the sub menu items
       fileMenuOption.add(saveData);
       fileMenuOption.add(loadData);

@@ -90,11 +90,10 @@ public class InputStockQuoteFormController implements ActionListener {
 
          // Everything good, save the stock quote
          this.m_stockQuoteDataContainer.getStockQuoteList().add(newQuote);
-         
+
          // Don't log it until it actually happens!
-          // log
-        Application.getAPPLICATION_LOGGER().finest("Creating stock quote with the following values:"+
-                newQuote.getTickerSymbol()+","+newQuote.getValue());
+         Application.getAPPLICATION_LOGGER().finest("Creating stock quote with the following values: Ticker Symbol:"
+                 + newQuote.getTickerSymbol() + ", Price:" + newQuote.getValue());
 
       } catch (MyFileException exp) {
          new ErrorPopup(form, exp);

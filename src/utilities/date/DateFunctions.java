@@ -50,7 +50,7 @@ public class DateFunctions {
          SimpleDateFormat sdf = new SimpleDateFormat("M/d/yyyy", Locale.ENGLISH);
          calendarObject.setTime(sdf.parse(dateString));
       } catch (ParseException exception) {
-    	  // DONE: Inform user that a date was not entered, so a default date will be used
+    	// DONE: Inform user that a date was not entered, so a default date will be used
     	  // new ErrorPopup(form, exp); pass dateString where form var is
     	  new ErrorPopup(new JFrame(), new Exception("Invalid date:  " + dateString + ".  Date will be defaulted to current date."));
       }

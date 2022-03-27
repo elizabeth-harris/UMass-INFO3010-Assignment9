@@ -15,12 +15,14 @@ import controllers.reportformcontrollers.ListAllInvestorsController;
 import controllers.reportformcontrollers.ListAllStockQuotesController;
 import java.awt.event.ActionListener;
 import datacontainers.StockQuoteDataContainer;
+import exceptionhandlers.DatabaseException;
 import exceptionhandlers.FileIOErrorPopup;
 import exceptionhandlers.MyFileException;
+import utilities.db.DatabaseIO;
+import utilities.io.StockQuoteIO;
 import utilities.io.BrokerIO;
 import utilities.io.InvestmentCompanyIO;
 import utilities.io.InvestorIO;
-import utilities.io.StockQuoteIO;
 
 // DONE:  Add additional import statements
 import datacontainers.BrokerDataContainer;
@@ -30,7 +32,7 @@ import view.MainMenu;
 
 public class MainMenuController implements ActionListener {
 
-	// File location to store output files
+	// File location
 	private String fileLocation;
 	// Log file location;
 	private String logfilelocation;
@@ -47,6 +49,7 @@ public class MainMenuController implements ActionListener {
 	 * Constructor
 	 *
 	 * @param fileLocation
+	 * @param log          file location
 	 */
 	public MainMenuController(String fileLocation, String logfilelocation) {
 		this.fileLocation = fileLocation;
@@ -74,7 +77,6 @@ public class MainMenuController implements ActionListener {
 		} else if (menuItemClicked.equals("List Available Stocks")) {
 			ListAllStockQuotesController reportController = new ListAllStockQuotesController(stockQuoteDataContainer);
 		}
-
 		// DONE Add additional menu items to add and report (this should already be done
 		// for assignment 5)
 		if (menuItemClicked.equals("Add Investment Company")) {
@@ -107,9 +109,7 @@ public class MainMenuController implements ActionListener {
 			// DONE: create a report controller object for the investor and pass the correct
 			// containers to the constructor
 			ListAllInvestorsController reportController = new ListAllInvestorsController(investorDataContainer);
-		}
-
-		else if (menuItemClicked.equals("Exit")) {
+		} else if (menuItemClicked.equals("Exit")) {
 			System.exit(0);
 		} else if (menuItemClicked.equals("Save Data")) {
 			try {
@@ -117,23 +117,27 @@ public class MainMenuController implements ActionListener {
 				StockQuoteIO.writeTextFile(fileLocation, stockQuoteDataContainer);
 				StockQuoteIO.writeXMLFile(fileLocation, stockQuoteDataContainer);
 				StockQuoteIO.writeJSONFile(fileLocation, stockQuoteDataContainer);
+				DatabaseIO.storeStockQuotes(stockQuoteDataContainer);
 				// DONE: Add additional calls to write methods for the other objects
 				// Broker
 				BrokerIO.writeSerializedFile(fileLocation, brokerDataContainer);
 				BrokerIO.writeTextFile(fileLocation, brokerDataContainer);
 				BrokerIO.writeXMLFile(fileLocation, brokerDataContainer);
 				BrokerIO.writeJSONFile(fileLocation, brokerDataContainer);
+				DatabaseIO.storeBrokers(brokerDataContainer);
 				// Investment Company
 				InvestmentCompanyIO.writeSerializedFile(fileLocation, investmentCompanyDataContainer);
 				InvestmentCompanyIO.writeTextFile(fileLocation, investmentCompanyDataContainer);
 				InvestmentCompanyIO.writeXMLFile(fileLocation, investmentCompanyDataContainer);
 				InvestmentCompanyIO.writeJSONFile(fileLocation, investmentCompanyDataContainer);
+				DatabaseIO.storeInvestmentCompanies(investmentCompanyDataContainer);
 				// Investor
 				InvestorIO.writeSerializedFile(fileLocation, investorDataContainer);
 				InvestorIO.writeTextFile(fileLocation, investorDataContainer);
 				InvestorIO.writeXMLFile(fileLocation, investorDataContainer);
 				InvestorIO.writeJSONFile(fileLocation, investorDataContainer);
-			} catch (MyFileException exp) {
+				DatabaseIO.storeInvestors(investorDataContainer);
+			} catch (MyFileException | DatabaseException exp) {
 				new FileIOErrorPopup(mainMenu, exp);
 			}
 		} else if (menuItemClicked.equals("Load Data")) {
@@ -144,16 +148,19 @@ public class MainMenuController implements ActionListener {
 				stockQuoteDataContainer.setStockQuoteList(StockQuoteIO.readTextFile(fileLocation));
 				stockQuoteDataContainer.setStockQuoteList(StockQuoteIO.readXMLFile(fileLocation).getStockQuoteList());
 				stockQuoteDataContainer.setStockQuoteList(StockQuoteIO.readJSONFile(fileLocation));
+				stockQuoteDataContainer.setStockQuoteList(DatabaseIO.retrieveStockQuotes());
 				// Brokers
 				brokerDataContainer.setBrokerList(BrokerIO.readSerializedFile(fileLocation));
 				brokerDataContainer.setBrokerList(BrokerIO.readTextFile(fileLocation));
 				brokerDataContainer.setBrokerList(BrokerIO.readXMLFile(fileLocation).getBrokerList());
 				brokerDataContainer.setBrokerList(BrokerIO.readJSONFile(fileLocation));
+				brokerDataContainer.setBrokerList(DatabaseIO.retrieveBrokers());
 				// Investors
 				investorDataContainer.setInvestorList(InvestorIO.readSerializedFile(fileLocation));
 				investorDataContainer.setInvestorList(InvestorIO.readTextFile(fileLocation));
 				investorDataContainer.setInvestorList(InvestorIO.readXMLFile(fileLocation).getInvestorList());
 				investorDataContainer.setInvestorList(InvestorIO.readJSONFile(fileLocation));
+				investorDataContainer.setInvestorList(DatabaseIO.retrieveInvestors());
 				// Investment Companies
 				investmentCompanyDataContainer
 						.setInvestmentCompanyList(InvestmentCompanyIO.readSerializedFile(fileLocation));
@@ -161,7 +168,8 @@ public class MainMenuController implements ActionListener {
 				investmentCompanyDataContainer.setInvestmentCompanyList(
 						InvestmentCompanyIO.readXMLFile(fileLocation).getInvestmentCompanyList());
 				investmentCompanyDataContainer.setInvestmentCompanyList(InvestmentCompanyIO.readJSONFile(fileLocation));
-			} catch (MyFileException exp) {
+				investmentCompanyDataContainer.setInvestmentCompanyList(DatabaseIO.retrieveInvestmentCompanies());
+			} catch (MyFileException | DatabaseException exp) {
 				new FileIOErrorPopup(mainMenu, exp);
 			}
 		}
