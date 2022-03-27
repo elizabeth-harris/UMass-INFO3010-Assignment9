@@ -17,14 +17,24 @@ public final class InitializeDatabase {
      * Table creation Strings Used to initialize the database tables
      */
     private static final String createTables[] = {
-        "CREATE TABLE stockquote (tickersymbol varchar(5), value float, date DateTime, PRIMARY KEY (tickersymbol))",};
+        "CREATE TABLE stockquote (tickersymbol varchar(5), value float, date DateTime, PRIMARY KEY (tickersymbol))",
+        "CREATE TABLE broker (id int, name varchar(80), address varchar(100), dateOfBirth DateTime, dateOfHire DateTime, dateOfTermination DateTime, salary float, status varchar(25), PRIMARY Key (id))",
+        "CREATE TABLE investmentcompany (name varchar(80), PRIMARY KEY (name))",
+        "CREATE TABLE investor (id int, name varchar(80), address varchar(100), dateOfBirth DateTime, memberSince DateTime, PRIMARY KEY (id))",
+        "CREATE TABLE investorstockquote (id int, tickersymbol varchar(5))"
+    };
 
     /**
      * Table deletion strings Used to delete the tables from the database.
      * Dropping tables will also remove all the data!
      */
     private static final String dropTables[] = {
-        "DROP TABLE stockquote"};
+        "DROP TABLE stockquote",
+        "DROP TABLE broker",
+        "DROP TABLE investmentcompany",
+        "DROP TABLE investor",
+        "DROP TABLE investorstockquote"
+        };
 
 
     /**

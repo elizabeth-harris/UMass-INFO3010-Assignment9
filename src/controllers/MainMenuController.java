@@ -124,19 +124,19 @@ public class MainMenuController implements ActionListener {
 				BrokerIO.writeTextFile(fileLocation, brokerDataContainer);
 				BrokerIO.writeXMLFile(fileLocation, brokerDataContainer);
 				BrokerIO.writeJSONFile(fileLocation, brokerDataContainer);
-				DatabaseIO.storeBrokers(brokerDataContainer);
+				// DatabaseIO.storeBrokers(brokerDataContainer);
 				// Investment Company
 				InvestmentCompanyIO.writeSerializedFile(fileLocation, investmentCompanyDataContainer);
 				InvestmentCompanyIO.writeTextFile(fileLocation, investmentCompanyDataContainer);
 				InvestmentCompanyIO.writeXMLFile(fileLocation, investmentCompanyDataContainer);
 				InvestmentCompanyIO.writeJSONFile(fileLocation, investmentCompanyDataContainer);
-				DatabaseIO.storeInvestmentCompanies(investmentCompanyDataContainer);
+				// DatabaseIO.storeInvestmentCompanies(investmentCompanyDataContainer);
 				// Investor
 				InvestorIO.writeSerializedFile(fileLocation, investorDataContainer);
 				InvestorIO.writeTextFile(fileLocation, investorDataContainer);
 				InvestorIO.writeXMLFile(fileLocation, investorDataContainer);
 				InvestorIO.writeJSONFile(fileLocation, investorDataContainer);
-				DatabaseIO.storeInvestors(investorDataContainer);
+				// DatabaseIO.storeInvestors(investorDataContainer);
 			} catch (MyFileException | DatabaseException exp) {
 				new FileIOErrorPopup(mainMenu, exp);
 			}
@@ -154,13 +154,13 @@ public class MainMenuController implements ActionListener {
 				brokerDataContainer.setBrokerList(BrokerIO.readTextFile(fileLocation));
 				brokerDataContainer.setBrokerList(BrokerIO.readXMLFile(fileLocation).getBrokerList());
 				brokerDataContainer.setBrokerList(BrokerIO.readJSONFile(fileLocation));
-				brokerDataContainer.setBrokerList(DatabaseIO.retrieveBrokers());
+				//brokerDataContainer.setBrokerList(DatabaseIO.retrieveBrokers());
 				// Investors
 				investorDataContainer.setInvestorList(InvestorIO.readSerializedFile(fileLocation));
 				investorDataContainer.setInvestorList(InvestorIO.readTextFile(fileLocation));
 				investorDataContainer.setInvestorList(InvestorIO.readXMLFile(fileLocation).getInvestorList());
 				investorDataContainer.setInvestorList(InvestorIO.readJSONFile(fileLocation));
-				investorDataContainer.setInvestorList(DatabaseIO.retrieveInvestors());
+				//investorDataContainer.setInvestorList(DatabaseIO.retrieveInvestors());
 				// Investment Companies
 				investmentCompanyDataContainer
 						.setInvestmentCompanyList(InvestmentCompanyIO.readSerializedFile(fileLocation));
@@ -168,7 +168,7 @@ public class MainMenuController implements ActionListener {
 				investmentCompanyDataContainer.setInvestmentCompanyList(
 						InvestmentCompanyIO.readXMLFile(fileLocation).getInvestmentCompanyList());
 				investmentCompanyDataContainer.setInvestmentCompanyList(InvestmentCompanyIO.readJSONFile(fileLocation));
-				investmentCompanyDataContainer.setInvestmentCompanyList(DatabaseIO.retrieveInvestmentCompanies());
+				//investmentCompanyDataContainer.setInvestmentCompanyList(DatabaseIO.retrieveInvestmentCompanies());
 			} catch (MyFileException | DatabaseException exp) {
 				new FileIOErrorPopup(mainMenu, exp);
 			}
